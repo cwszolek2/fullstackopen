@@ -1,8 +1,6 @@
 import { useState } from 'react'
 
-const Display = (props) => (
-  <div>{props.text}</div>
-);
+const Header = (props) => <h1>{props.text}</h1>
 
 const Button = (props) => (
   <button onClick={props.handleClick}>
@@ -10,50 +8,73 @@ const Button = (props) => (
   </button>
 );
 
+const StatisticLine = (props) => {
+  if(props.text === "positive") {
+    return (
+      <tr>
+        <td>{props.text} {props.value}%</td>
+      </tr>
+    )
+  }
+  else {
+    return (
+      <tr>
+        <td>{props.text} {props.value}</td>
+      </tr>
+    )
+  }
+}
+
+const Statistics = ({props}) => {
+  const total = props.good + props.neutral + props.bad;
+  const average = (props.good * 1 + props.neutral * 0 + props.bad * -1) / total;
+  const positive = (props.good + props.neutral) / total * 100;
+
+  if(total < 1) 
+    return (
+      <div>No feedback given</div>
+    );
+  else 
+    return (
+      <table>
+        <tbody>
+          <StatisticLine text="good" value={props.good} />
+          <StatisticLine text="neutral" value={props.neutral} />
+          <StatisticLine text="bad" value={props.bad} />
+          <StatisticLine text="total" value={total} />
+          <StatisticLine text="average" value={average} />
+          <StatisticLine text="positive" value={positive} />
+        </tbody>
+      </table>
+    );
+}
 
 const App = () => {
   // save clicks of each button to its own state
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const [reviews, setReviews] = useState({
+    good: 0, neutral: 0, bad: 0
+  })
 
   const setGoodValue = (newValue) => {
-    setGood(newValue);
+    setReviews({ ...reviews, good: newValue})
   };
 
   const setNeutralValue = (newValue) => {
-    setNeutral(newValue);
+    setReviews({ ...reviews, neutral: newValue})
   };
 
   const setBadValue = (newValue) => {
-    setBad(newValue);
+    setReviews({ ...reviews, bad: newValue})
   };
-
-  function getAll() {
-    return good + neutral + bad;
-  }
-  
-  function getAverage() {
-    return (good * 1 + neutral * 0 + bad * -1) / getAll();
-  }
-  function getPositive() {
-    return (good + neutral) / getAll();
-  }
 
   return (
     <div>
-      <h1>give feedback</h1>
-      <Button handleClick={() => setGoodValue(good + 1)} text="good" /> 
-      <Button handleClick={() => setNeutralValue(neutral + 1)} text="neutral" />
-      <Button handleClick={() => setBadValue(bad + 1)} text="bad" />
-      <h1>statistics</h1>
-      <Display text={"good " + good} />
-      <Display text={"neutral " + neutral} />
-      <Display text={"bad " + bad} />
-      <Display text={"all " + getAll() } />
-      <Display text={"average " + getAverage()} />
-      <Display text={"positive " + getAll() + "%"}  />
-
+      <Header text="give feedback"/>
+      <Button handleClick={() => setGoodValue(reviews.good + 1)} text="good" /> 
+      <Button handleClick={() => setNeutralValue(reviews.neutral + 1)} text="neutral" />
+      <Button handleClick={() => setBadValue(reviews.bad + 1)} text="bad" />
+      <Header text="statistics"/>
+      <Statistics props={reviews} />
     </div>
   );
 };
