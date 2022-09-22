@@ -25,10 +25,10 @@ const StatisticLine = (props) => {
   }
 }
 
-const Statistics = ({props}) => {
-  const total = props.good + props.neutral + props.bad;
-  const average = (props.good * 1 + props.neutral * 0 + props.bad * -1) / total;
-  const positive = (props.good + props.neutral) / total * 100;
+const Statistics = (props) => {
+  const total = props.reviews.good + props.reviews.neutral + props.reviews.bad;
+  const average = (props.reviews.good * 1 + props.reviews.neutral * 0 + props.reviews.bad * -1) / total;
+  const positive = (props.reviews.good + props.reviews.neutral) / total * 100;
 
   if(total < 1) 
     return (
@@ -38,9 +38,9 @@ const Statistics = ({props}) => {
     return (
       <table>
         <tbody>
-          <StatisticLine text="good" value={props.good} />
-          <StatisticLine text="neutral" value={props.neutral} />
-          <StatisticLine text="bad" value={props.bad} />
+          <StatisticLine text="good" value={props.reviews.good} />
+          <StatisticLine text="neutral" value={props.reviews.neutral} />
+          <StatisticLine text="bad" value={props.reviews.bad} />
           <StatisticLine text="total" value={total} />
           <StatisticLine text="average" value={average} />
           <StatisticLine text="positive" value={positive} />
@@ -74,7 +74,7 @@ const App = () => {
       <Button handleClick={() => setNeutralValue(reviews.neutral + 1)} text="neutral" />
       <Button handleClick={() => setBadValue(reviews.bad + 1)} text="bad" />
       <Header text="statistics"/>
-      <Statistics props={reviews} />
+      <Statistics reviews={reviews} />
     </div>
   );
 };
