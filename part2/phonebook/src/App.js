@@ -14,8 +14,15 @@ const App = (props) => {
       name: newName
     }
 
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    const currentNames = persons.map(person => person.name);
+
+    if(currentNames.includes(newName)) {
+      window.alert("${newName} already exists in the phonebook")
+    } else {  
+      setPersons(persons.concat(personObject))
+      setNewName('')
+    }
+
   }
 
   const handleNameChange = (event) => {
