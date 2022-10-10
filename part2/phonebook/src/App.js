@@ -5,10 +5,14 @@ const App = (props) => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas',
       number: '382-2873'
-    }
+    },
+    { name: 'John Winthrop',
+      number: '338-2838'
+    },
   ]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [searchText, setSearchText] = useState('')
 
   const addName = (event) => {
     event.preventDefault();
@@ -29,6 +33,10 @@ const App = (props) => {
 
   }
 
+  const handleSearchTextChange = (event) => {
+    setSearchText(event.target.value);
+  }
+
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   }
@@ -37,9 +45,19 @@ const App = (props) => {
     setNewNumber(event.target.value);
   }
 
+  const personsToShow = searchText === "" 
+    ? persons  
+    : persons.filter(person => {
+        return person.name.includes(searchText);
+      })
+
   return (
     <div>
       <h2>Phonebook</h2>
+      filter shown with <input  
+                          value={searchText}
+                          onChange={handleSearchTextChange}
+                        />
       <form onSubmit={addName}>
         <div>
           name: <input 
@@ -59,7 +77,7 @@ const App = (props) => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person => 
+        {personsToShow.map(person => 
           <Person key={person.name} person={person} />  
         )}
       </ul>
