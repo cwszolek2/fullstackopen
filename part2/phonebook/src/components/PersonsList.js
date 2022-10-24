@@ -8,7 +8,7 @@ const PersonsList = ({ personsToShow }) => {
                 {personsToShow.map(person => 
                     <Person key={person.name} person={person} />  
                 )}
-        </ul>
+            </ul>
         </div>
     )
 }
