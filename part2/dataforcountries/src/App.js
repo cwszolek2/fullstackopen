@@ -4,9 +4,9 @@ import SearchBar from './components/SearchBar'
 import CountryList from './components/CountryList'
 
 function App() {
-  const [countries, setCountries] = useState([]);
-  const [searchText, setSearchText] = useState("");
-
+  const [countries, setCountries] = useState([])
+  const [searchText, setSearchText] = useState("")
+  const [showCountryNames, setShowCountryNames] = useState([])
 
   const hook = () => {
     axios
@@ -23,6 +23,26 @@ function App() {
     setSearchText(event.target.value)
   }
 
+  const showCountryDetailsClick = (event, country) => {
+    console.log(showCountryNames)
+    if(!(showCountryNames === undefined) && (showCountryNames.includes(country))) {
+      console.log("includes")
+      setShowCountryNames(showCountryNames.filter(countryName => {
+        return countryName != country
+      }))
+    } else {
+      setShowCountryNames(showCountryNames.concat(country))
+    }
+    /*let eventCountry = event.value;
+    if(showCountries.includes(eventCountry.name.common)) {
+      setShowCountries(showCountries.filter(country => {
+        return country.name.common.includes(eventCountry.name.common)
+      }))
+    } else {
+      setShowCountries(showCountries.concat(eventCountry.value))
+    }*/
+  }
+
   const countriesToShow = () => {
     if(searchText === ''){
       return []
@@ -33,12 +53,14 @@ function App() {
       return results;
     }
   }
+  
+
 
   return (
       <div>
         <SearchBar  searchText={searchText}
                     handleSearchTextChange={handleSearchTextChange}/>
-        <CountryList countriesToShow={countriesToShow}/> 
+        <CountryList countriesToShow={countriesToShow} showCountryNames={showCountryNames} showCountryDetailsClick={showCountryDetailsClick}/> 
       </div>
   )
 }

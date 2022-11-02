@@ -1,7 +1,8 @@
-import Country from './Country'
-import CountryDetailed from './CountryDetailed'
+import React from 'react'
 
-const CountryList = ({ countriesToShow }) => {
+import Country from './Country'
+
+const CountryList = ({ countriesToShow, showCountryNames, showCountryDetailsClick }) => {
     if(countriesToShow().length === 0) {
         return (
             <div>
@@ -12,7 +13,7 @@ const CountryList = ({ countriesToShow }) => {
     else if (countriesToShow().length === 1) {
         return (
             <div>
-                <CountryDetailed country={countriesToShow()[0]}/>
+                <Country country={countriesToShow()[0]}/>
             </div>
         )
     }
@@ -24,12 +25,29 @@ const CountryList = ({ countriesToShow }) => {
         )
     }
     else 
+
         return (
             <div>
                 <ul>
-                    {countriesToShow().map(country => 
-                        <Country key={country.name.common} country={country}/>
-                    )}
+                    {countriesToShow().map(country => {
+                        if(showCountryNames.includes(country.name.common)) {
+                            return(
+                                
+                                    <li key={country.name.common}>{country.name.common} 
+                                        <button onClick={e => showCountryDetailsClick(e, country.name.common)}>Show</button>
+                                        <Country country={country}/>
+                                    </li>
+
+                                
+                            )
+                        } else {
+                            return(
+                                <li key={country.name.common}>{country.name.common} 
+                                    <button onClick={e => showCountryDetailsClick(e, country.name.common)}>Show</button>
+                                </li>
+                            )
+                        }
+                    })}
                 </ul>
             </div>
         )
