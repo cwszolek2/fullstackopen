@@ -7,18 +7,42 @@ function App() {
   const [countries, setCountries] = useState([])
   const [searchText, setSearchText] = useState("")
   const [showCountryNames, setShowCountryNames] = useState([])
+  const [weather, setWeather] = useState({})
 
-  const hook = () => {
+
+  
+  const countryHook = () => {
     axios
       .get('https://restcountries.com/v3.1/all')
       .then(response => {
         setCountries(response.data);
       })
-
   }
 
-  useEffect(hook, []);
+  useEffect(countryHook, []);
 
+  const weatherHook = () => {
+    const api_key = process.env.REACT_APP_WEATHER_API_KEY
+    const temp = 0;
+    const showCountriesData = countries.filter(country => showCountryNames.includes(country.name.common))
+    for(let i = 0; i < showCountriesData.length; i++) {
+      const country = showCountriesData[i];
+      axios
+        .get(`https://api.openweathermap.org/data/2.5/weather?lat=${country.latlng[0]}&lon=${country.latlng[1]}&appid=${api_key}`)
+        .then(response => {
+          console.log("Response: ", response)
+          let weatherEntry = {[country.name.common]:response}
+          setWeather(weather => ({
+            ...weather,
+            ...weatherEntry
+          }))
+        })
+        console.log(weather)
+    } 
+  }
+
+  useEffect(weatherHook, [countries, showCountryNames])
+  
   const handleSearchTextChange = (event) => {
     setSearchText(event.target.value)
   }
@@ -26,21 +50,12 @@ function App() {
   const showCountryDetailsClick = (event, country) => {
     console.log(showCountryNames)
     if(!(showCountryNames === undefined) && (showCountryNames.includes(country))) {
-      console.log("includes")
-      setShowCountryNames(showCountryNames.filter(countryName => {
-        return countryName != country
-      }))
+      setShowCountryNames(showCountryNames.filter(countryName => 
+        countryName != country
+      ))
     } else {
       setShowCountryNames(showCountryNames.concat(country))
     }
-    /*let eventCountry = event.value;
-    if(showCountries.includes(eventCountry.name.common)) {
-      setShowCountries(showCountries.filter(country => {
-        return country.name.common.includes(eventCountry.name.common)
-      }))
-    } else {
-      setShowCountries(showCountries.concat(eventCountry.value))
-    }*/
   }
 
   const countriesToShow = () => {
@@ -60,7 +75,7 @@ function App() {
       <div>
         <SearchBar  searchText={searchText}
                     handleSearchTextChange={handleSearchTextChange}/>
-        <CountryList countriesToShow={countriesToShow} showCountryNames={showCountryNames} showCountryDetailsClick={showCountryDetailsClick}/> 
+        <CountryList countriesToShow={countriesToShow} showCountryNames={showCountryNames} showCountryDetailsClick={showCountryDetailsClick} weather={weather}/> 
       </div>
   )
 }

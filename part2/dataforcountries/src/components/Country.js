@@ -1,7 +1,8 @@
 import React from 'react'
 
-const Country = ({ country }) => {
+const Country = ({ country, weather }) => {
     const keys = Object.keys(country.languages);
+    console.log(weather)
     /*const langs = []
     for(var key in country.languages) {
         langs.push(languages[key])

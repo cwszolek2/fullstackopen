@@ -2,7 +2,7 @@ import React from 'react'
 
 import Country from './Country'
 
-const CountryList = ({ countriesToShow, showCountryNames, showCountryDetailsClick }) => {
+const CountryList = ({ countriesToShow, showCountryNames, showCountryDetailsClick, weather }) => {
     if(countriesToShow().length === 0) {
         return (
             <div>
@@ -13,7 +13,7 @@ const CountryList = ({ countriesToShow, showCountryNames, showCountryDetailsClic
     else if (countriesToShow().length === 1) {
         return (
             <div>
-                <Country country={countriesToShow()[0]}/>
+                <Country country={countriesToShow()[0]} waether={weather}/>
             </div>
         )
     }
@@ -35,10 +35,8 @@ const CountryList = ({ countriesToShow, showCountryNames, showCountryDetailsClic
                                 
                                     <li key={country.name.common}>{country.name.common} 
                                         <button onClick={e => showCountryDetailsClick(e, country.name.common)}>Show</button>
-                                        <Country country={country}/>
+                                        <Country country={country} />
                                     </li>
-
-                                
                             )
                         } else {
                             return(
