@@ -1,4 +1,4 @@
-import Reach from 'react'
+import React from 'react'
 
 const PersonForm = ({ addName, newName, handleNameChange, newNumber, handleNumberChange }) => {
     return (
@@ -14,7 +14,7 @@ const PersonForm = ({ addName, newName, handleNameChange, newNumber, handleNumbe
                 number: <input
                             value={newNumber}
                             onChange={handleNumberChange}
-                        />
+                        /> 
                 </div>
                 <div>
                     <button type="submit">add</button>
