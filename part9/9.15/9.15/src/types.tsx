@@ -25,5 +25,5 @@ interface CoursePartBase {
     kind: "special";
   }
 
-type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground;
+type CoursePart = CoursePartBasic | CoursePartGroup | CoursePartBackground | CoursePartRequirements;
 export default CoursePart;

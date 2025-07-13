@@ -1,5 +1,7 @@
-//On 2.14
+//On 2.16
+import './index.css'
 import { useState, useEffect } from 'react'
+import Notification from './components/Notification'
 import personService from './services/Persons'
 import PersonsList from './components/PersonsList'
 import PersonForm from './components/PersonForm'
@@ -10,6 +12,8 @@ const App = (props) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [notificationName, setNotificationName] = useState(null)
+  const [messageType, setMessageType] = useState('')
 
   useEffect(() => {
     personService
@@ -71,9 +75,14 @@ const App = (props) => {
           personService
             .editPerson(personObject)
             .then(returnPerson => {
-              setPersons(persons.concat(returnPerson))
               //lol idk how to filter this
               //setPersons(persons.filter(p => (p.name !== personObject.name && p.number === personObject.number)))
+              setPersons(
+                persons.map((person) => 
+                  person.id !== personObject.id ? person : personObject
+                )
+              )
+              //setPersons(persons.concat(returnPerson))
               setNewName('')
               setNewNumber('')
             })
@@ -81,6 +90,13 @@ const App = (props) => {
               alert(
                 `the person '${personObject.name}' could not have their number edited`
               )
+              setNotificationName(personObject.name, error)
+              setMessageType('error')
+              setTimeout(() => {
+                setNotificationName(null)
+              }, 5000)
+              setPersons(persons.filter(p => (p.name !== personObject.name)));
+              setNotificationName('', null)
             })
         }
       }
@@ -89,9 +105,14 @@ const App = (props) => {
       personService
         .createPerson(personObject)
         .then(returnedPerson => {
-          setPersons(persons.concat(returnedPerson))
+          setPersons(persons.concat(returnedPerson)) 
+          setNotificationName(returnedPerson.name)
+          setMessageType('user-added')
+          setTimeout(() => {
+            setNotificationName(null)
+          }, 5000) 
           setNewName('')
-          setNewNumber('')  
+          setNewNumber('')
         })
         .catch(error => {
           alert(
@@ -149,6 +170,7 @@ const App = (props) => {
       <Search searchText={searchText}
               handleSearchTextChange={handleSearchTextChange}
       />
+      <Notification message={notificationName} type={messageType}/>
       <h3>Add a new</h3>
       <PersonForm  addName={addName}
                     newName={newName}
