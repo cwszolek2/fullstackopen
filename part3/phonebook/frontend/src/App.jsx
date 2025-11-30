@@ -1,4 +1,4 @@
-//On 2.16
+//Finished 3.12
 import './index.css'
 import { useState, useEffect } from 'react'
 import Notification from './components/Notification'
